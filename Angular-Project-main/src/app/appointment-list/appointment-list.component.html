@@ -1,0 +1,93 @@
+<div class="container">
+  <!-- Notifications for success/error -->
+  <div *ngIf="notificationMessage" class="alert mt-3" [ngClass]="{'alert-success': notificationType === 'success', 'alert-danger': notificationType === 'error'}">
+    {{ notificationMessage }}
+  </div>
+
+  <!-- Form for adding or editing an appointment -->
+  <div class="card mt-3">
+    <div class="row">
+      <div class="col">
+        <h2 class="text-center">{{ isEditing ? 'Edit Appointment' : 'Create New Appointment' }}</h2>
+      </div>
+    </div>
+
+    <!-- Input for adding a new appointment -->
+    <div class="row mt-3" *ngIf="!isEditing">
+      <div class="col-md-6">
+        <input
+          class="form-control"
+          [(ngModel)]="newAppointmentTitle"
+          type="text"
+          placeholder="New Appointment description"
+        />
+      </div>
+      <div class="col-md-4">
+        <input
+          class="form-control"
+          [(ngModel)]="newAppointmentDate"
+          type="date"
+        />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" (click)="addAppointment()">
+          Add
+        </button>
+      </div>
+    </div>
+
+    <!-- Input for editing an existing appointment -->
+    <div class="row mt-3" *ngIf="isEditing">
+      <div class="col-md-6">
+        <input
+          class="form-control"
+          [(ngModel)]="editAppointmentTitle"
+          type="text"
+          placeholder="Edit Appointment description"
+        />
+      </div>
+      <div class="col-md-4">
+        <input
+          class="form-control"
+          [(ngModel)]="editAppointmentDate"
+          type="date"
+        />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-success w-100" (click)="saveAppointment()">
+          Save
+        </button>
+      </div>
+      <div class="col-md-12 mt-2">
+        <button class="btn btn-secondary w-100" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appointment List -->
+  <h2 class="text-center mt-5">Appointment List</h2>
+  <ul class="list-group mt-3" *ngIf="appointments.length; else noAppointments">
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center border border-secondary"
+      *ngFor="let appointment of appointments; index as i"
+    >
+      <div>
+        <strong>{{ appointment.title }}</strong> <br />
+        <small>{{ appointment.date | date : 'dd.MM.yyyy' }}</small>
+      </div>
+      <div>
+        <button class="btn btn-info me-2" (click)="editAppointment(i)">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button class="btn btn-danger" (click)="deleteAppointment(i)">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+      </div>
+    </li>
+  </ul>
+
+  <!-- No appointments state -->
+  <ng-template #noAppointments>
+    <p class="text-center text-muted">No appointments yet. Start by adding one!</p>
+  </ng-template>
+</div>
